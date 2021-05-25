@@ -7,6 +7,7 @@
 <br/>
 <p align="center">آنچه می‌جویی تویی و آنچه می‌خواهی تویی</p>
 <p align="center">پس ز تو تا آنچه گم کردی ره بسیار نیست</p>
+<p align="center"><a href="https://ganjoor.net/attar/divana/ghazal-attar/sh106" target="_blank">More by Attar of Nishapur</a></p>
 
 This repository consists of models, scripts, and notebooks that help you to use all the benefits of Wav2Vec 2.0 in your research. In the following, I'll show you how to train speech tasks in your dataset and how to use my pretrained models.
 
@@ -22,7 +23,7 @@ There are two ways to accomplish this task: using Google Colab notebook or the s
 
 | Task                       	| Notebook                                                                                                                                                                                           	|
 |----------------------------	|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
-| Speech Emotion Recognition 	| [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/m3hrdadfi/soxan/blob/master/notebooks/Emotion_recognition_in_Greek_speech_using_Wav2Vec2.ipynb) 	|
+| Speech Emotion Recognition 	| [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/m3hrdadfi/soxan/blob/main/notebooks/Emotion_recognition_in_Greek_speech_using_Wav2Vec2.ipynb) 	|
 
 #### CMD
 
