@@ -2,13 +2,6 @@
 > در زبان پارسی به نام سخن
 
 
-<p align="center">چون رسیدی تو به تو هم هیچ باشی هم همه</p>
-<p align="center">چه همه چه هیچ چون اینجا سخن بر کار نیست</p>
-<br/>
-<p align="center">آنچه می‌جویی تویی و آنچه می‌خواهی تویی</p>
-<p align="center">پس ز تو تا آنچه گم کردی ره بسیار نیست</p>
-<p align="center"><a href="https://ganjoor.net/attar/divana/ghazal-attar/sh106" target="_blank">More by Attar of Nishapur</a></p>
-
 This repository consists of models, scripts, and notebooks that help you to use all the benefits of Wav2Vec 2.0 in your research. In the following, I'll show you how to train speech tasks in your dataset and how to use my pretrained models.
 
 ## How to train
