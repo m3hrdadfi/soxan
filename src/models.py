@@ -7,7 +7,7 @@ from transformers.models.wav2vec2.modeling_wav2vec2 import (
     Wav2Vec2Model
 )
 
-from modeling_outputs import SpeechClassifierOutput
+from src.modeling_outputs import SpeechClassifierOutput
 
 
 class Wav2Vec2ClassificationHead(nn.Module):
