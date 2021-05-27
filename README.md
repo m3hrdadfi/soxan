@@ -42,7 +42,8 @@ python3 run_wav2vec_clf.py \
     --save_total_limit=2 \
     --do_eval \
     --do_train \
-    --fp16
+    --fp16 \
+    --freeze_feature_extractor
 ```
 
 
