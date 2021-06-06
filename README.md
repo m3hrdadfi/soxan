@@ -15,9 +15,11 @@ There are two ways to accomplish this task: using Google Colab notebook or the s
 
 #### Training - Notebook
 
-| Task                       	| Notebook                                                                                                                                                                                           	|
-|----------------------------	|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
-| Speech Emotion Recognition 	| [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/m3hrdadfi/soxan/blob/main/notebooks/Emotion_recognition_in_Greek_speech_using_Wav2Vec2.ipynb) 	|
+| Task                       | Notebook                                                                                                                                                                                                            |
+|----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Speech Emotion Recognition | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/m3hrdadfi/soxan/blob/main/notebooks/Emotion_recognition_in_Greek_speech_using_Wav2Vec2.ipynb) |
+| Audio Classification       | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/m3hrdadfi/soxan/blob/main/notebooks/Eating_Sound_Collection_using_Wav2Vec2.ipynb)             |
+
 
 #### Training - CMD
 
