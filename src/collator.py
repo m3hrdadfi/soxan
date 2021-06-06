@@ -3,7 +3,7 @@ from typing import Dict, List, Optional, Union
 import torch
 
 import transformers
-from transformers import Wav2Vec2Processor
+from transformers import Wav2Vec2Processor, Wav2Vec2FeatureExtractor
 
 
 @dataclass
@@ -11,8 +11,8 @@ class DataCollatorCTCWithPadding:
     """
     Data collator that will dynamically pad the inputs received.
     Args:
-        processor (:class:`~transformers.Wav2Vec2Processor`)
-            The processor used for proccessing the data.
+        feature_extractor (:class:`~transformers.Wav2Vec2FeatureExtractor`)
+            The feature_extractor used for proccessing the data.
         padding (:obj:`bool`, :obj:`str` or :class:`~transformers.tokenization_utils_base.PaddingStrategy`, `optional`, defaults to :obj:`True`):
             Select a strategy to pad the returned sequences (according to the model's padding side and padding index)
             among:
@@ -32,7 +32,7 @@ class DataCollatorCTCWithPadding:
             7.5 (Volta).
     """
 
-    processor: Wav2Vec2Processor
+    feature_extractor: Wav2Vec2FeatureExtractor
     padding: Union[bool, str] = True
     max_length: Optional[int] = None
     max_length_labels: Optional[int] = None
@@ -45,7 +45,7 @@ class DataCollatorCTCWithPadding:
 
         d_type = torch.long if isinstance(label_features[0], int) else torch.float
 
-        batch = self.processor.pad(
+        batch = self.feature_extractor.pad(
             input_features,
             padding=self.padding,
             max_length=self.max_length,

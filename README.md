@@ -52,7 +52,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torchaudio
-from transformers import AutoConfig, Wav2Vec2Processor
+from transformers import AutoConfig, Wav2Vec2Processor, Wav2Vec2FeatureExtractor
 from src.models import Wav2Vec2ForSpeechClassification
 
 
@@ -61,8 +61,10 @@ model_name_or_path = "path/to/your-pretrained-model"
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 config = AutoConfig.from_pretrained(model_name_or_path)
-processor = Wav2Vec2Processor.from_pretrained(model_name_or_path)
-sampling_rate = processor.feature_extractor.sampling_rate
+# processor = Wav2Vec2Processor.from_pretrained(model_name_or_path)
+# sampling_rate = processor.feature_extractor.sampling_rate
+feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(model_name_or_path)
+sampling_rate = feature_extractor.sampling_rate
 model = Wav2Vec2ForSpeechClassification.from_pretrained(model_name_or_path).to(device)
 
 def speech_file_to_array_fn(path, sampling_rate):
@@ -74,7 +76,9 @@ def speech_file_to_array_fn(path, sampling_rate):
 
 def predict(path, sampling_rate):
     speech = speech_file_to_array_fn(path, sampling_rate)
-    features = processor(speech, sampling_rate=sampling_rate, return_tensors="pt", padding=True)
+    
+    # features = processor(speech, sampling_rate=sampling_rate, return_tensors="pt", padding=True)
+    features = feature_extractor(speech, sampling_rate=sampling_rate, return_tensors="pt", padding=True)
 
     input_values = features.input_values.to(device)
     attention_mask = features.attention_mask.to(device)
@@ -104,6 +108,8 @@ Output:
 
 #### Models
 
-| Dataset                                    	| Model                                                                                                                                       	|
-|--------------------------------------------	|---------------------------------------------------------------------------------------------------------------------------------------------	|
-| Speech Emotion Recognition (Greek) (AESDD) 	| [m3hrdadfi/wav2vec2-xlsr-greek-speech-emotion-recognition](https://huggingface.co/m3hrdadfi/wav2vec2-xlsr-greek-speech-emotion-recognition) 	|
+| Dataset                                                                                                                      | Model                                                                                                                                       |
+|------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| [Speech Emotion Recognition (Greek) (AESDD)](http://m3c.web.auth.gr/research/aesdd-speech-emotion-recognition/)              | [m3hrdadfi/wav2vec2-xlsr-greek-speech-emotion-recognition](https://huggingface.co/m3hrdadfi/wav2vec2-xlsr-greek-speech-emotion-recognition) |
+| [Eating Sound Collection](https://www.kaggle.com/mashijie/eating-sound-collection)                                           | [m3hrdadfi/wav2vec2-base-100k-eating-sound-collection](https://huggingface.co/m3hrdadfi/wav2vec2-base-100k-eating-sound-collection)         |
+| [GTZAN Dataset - Music Genre Classification](https://www.kaggle.com/andradaolteanu/gtzan-dataset-music-genre-classification) | [m3hrdadfi/wav2vec2-base-100k-gtzan-music-genres](https://huggingface.co/m3hrdadfi/wav2vec2-base-100k-gtzan-music-genres)                   |

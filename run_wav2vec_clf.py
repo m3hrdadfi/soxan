@@ -16,6 +16,7 @@ from transformers import (
     EvalPrediction,
     AutoConfig,
     Wav2Vec2Processor,
+    Wav2Vec2FeatureExtractor,
     is_apex_available,
     set_seed,
 )
@@ -49,8 +50,8 @@ class ModelArguments:
     config_name: Optional[str] = field(
         default=None, metadata={"help": "Pretrained config name or path if not the same as model_name"}
     )
-    processor_name: Optional[str] = field(
-        default=None, metadata={"help": "Pretrained processor name or path if not the same as model_name"}
+    feature_extractor_name: Optional[str] = field(
+        default=None, metadata={"help": "Pretrained feature_extractor name or path if not the same as model_name"}
     )
     cache_dir: Optional[str] = field(
         default=None,
@@ -273,13 +274,19 @@ def main():
 
     # tokenizer = Wav2Vec2CTCTokenizer.from_pretrained(model_args.model_name_or_path)
     # feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(model_args.model_name_or_path)
-    processor = Wav2Vec2Processor.from_pretrained(
-        model_args.processor_name if model_args.processor_name else model_args.model_name_or_path,
+    # processor = Wav2Vec2Processor.from_pretrained(
+    #     model_args.processor_name if model_args.processor_name else model_args.model_name_or_path,
+    #     cache_dir=model_args.cache_dir,
+    #     revision=model_args.model_revision,
+    #     use_auth_token=True if model_args.use_auth_token else None,
+    # )
+    feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(
+        model_args.feature_extractor_name if model_args.feature_extractor_name else model_args.model_name_or_path,
         cache_dir=model_args.cache_dir,
         revision=model_args.model_revision,
         use_auth_token=True if model_args.use_auth_token else None,
     )
-    target_sampling_rate = processor.feature_extractor.sampling_rate
+    target_sampling_rate = feature_extractor.feature_extractor.sampling_rate
 
     model = Wav2Vec2ForSpeechClassification.from_pretrained(
         model_args.model_name_or_path,
@@ -313,7 +320,7 @@ def main():
         speech_list = [speech_file_to_array_fn(path) for path in examples[input_column_name]]
         target_list = [label_to_id(label, label_list) for label in examples[output_column_name]]
 
-        result = processor(speech_list, sampling_rate=target_sampling_rate)
+        result = feature_extractor(speech_list, sampling_rate=target_sampling_rate)
         result["labels"] = list(target_list)
 
         return result
@@ -379,7 +386,7 @@ def main():
             return {"accuracy": (preds == p.label_ids).astype(np.float32).mean().item()}
 
     # Data collator
-    data_collator = DataCollatorCTCWithPadding(processor=processor, padding=True)
+    data_collator = DataCollatorCTCWithPadding(feature_extractor=feature_extractor, padding=True)
 
     # Initialize our Trainer
     trainer = CTCTrainer(
@@ -389,7 +396,7 @@ def main():
         compute_metrics=compute_metrics,
         train_dataset=train_dataset if training_args.do_train else None,
         eval_dataset=eval_dataset if training_args.do_eval else None,
-        tokenizer=processor.feature_extractor,
+        tokenizer=feature_extractor,
     )
 
     # Training
@@ -407,7 +414,7 @@ def main():
 
         # save the feature_extractor and the tokenizer
         if is_main_process(training_args.local_rank):
-            processor.save_pretrained(training_args.output_dir)
+            feature_extractor.save_pretrained(training_args.output_dir)
 
         metrics = train_result.metrics
         max_train_samples = (
