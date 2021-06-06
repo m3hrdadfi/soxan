@@ -83,10 +83,11 @@ def predict(path, sampling_rate):
     features = feature_extractor(speech, sampling_rate=sampling_rate, return_tensors="pt", padding=True)
 
     input_values = features.input_values.to(device)
-    attention_mask = features.attention_mask.to(device)
+    # attention_mask = features.attention_mask.to(device)
 
     with torch.no_grad():
-        logits = model(input_values, attention_mask=attention_mask).logits
+        # logits = model(input_values, attention_mask=attention_mask).logits
+        logits = model(input_values).logits
 
     scores = F.softmax(logits, dim=1).detach().cpu().numpy()[0]
     outputs = [{"Emotion": config.id2label[i], "Score": f"{round(score * 100, 3):.1f}%"} for i, score in enumerate(scores)]
