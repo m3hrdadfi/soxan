@@ -22,11 +22,12 @@ from transformers import (
 )
 from transformers.trainer_utils import get_last_checkpoint, is_main_process
 
-from src.models import Wav2Vec2ForSpeechClassification
+from src.models import Wav2Vec2ForSpeechClassification, HubertForSpeechClassification
 from src.collator import DataCollatorCTCWithPadding
 from src.trainer import CTCTrainer
 
 logger = logging.getLogger(__name__)
+MODEL_MODES = ["wav2vec", "hubert"]
 POOLING_MODES = ["mean", "sum", "max"]
 DELIMITERS = {"tab": "\t", "comma": ",", "pipe": "|"}
 
@@ -39,6 +40,12 @@ class ModelArguments:
 
     model_name_or_path: str = field(
         metadata={"help": "Path to pretrained model or model identifier from huggingface.co/models"}
+    )
+    model_mode: str = field(
+        default="wav2vec",
+        metadata={
+            "help": "Specifies the base model and must be from the following: " + ", ".join(MODEL_MODES)
+        },
     )
     pooling_mode: str = field(
         default="mean",
@@ -288,14 +295,26 @@ def main():
     )
     target_sampling_rate = feature_extractor.feature_extractor.sampling_rate
 
-    model = Wav2Vec2ForSpeechClassification.from_pretrained(
-        model_args.model_name_or_path,
-        from_tf=bool(".ckpt" in model_args.model_name_or_path),
-        config=config,
-        cache_dir=model_args.cache_dir,
-        revision=model_args.model_revision,
-        use_auth_token=True if model_args.use_auth_token else None,
-    )
+    if model_args.model_mode == "wav2vec":
+        model = Wav2Vec2ForSpeechClassification.from_pretrained(
+            model_args.model_name_or_path,
+            from_tf=bool(".ckpt" in model_args.model_name_or_path),
+            config=config,
+            cache_dir=model_args.cache_dir,
+            revision=model_args.model_revision,
+            use_auth_token=True if model_args.use_auth_token else None,
+        )
+    elif model_args.model_mode == "hubert":
+        model = HubertForSpeechClassification.from_pretrained(
+            model_args.model_name_or_path,
+            from_tf=bool(".ckpt" in model_args.model_name_or_path),
+            config=config,
+            cache_dir=model_args.cache_dir,
+            revision=model_args.model_revision,
+            use_auth_token=True if model_args.use_auth_token else None,
+        )
+    else:
+        raise ValueError("--model_mode does not exist in predefined modes: " + ",".join(MODEL_MODES))
 
     if model_args.freeze_feature_extractor:
         model.freeze_feature_extractor()
