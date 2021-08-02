@@ -1,0 +1,23 @@
+.text-center {
+    text-align: center !important;
+}
+
+.rtl {
+    font-family: Vazir !important;
+    text-align: right;
+    direction: rtl;
+}
+.ltr {
+    text-align: left;
+    direction: ltr;
+}
+
+.ctc-box {
+    background: #46e09947;
+    padding: 10px;
+    border-radius: 15px;
+    border: 1px solid #46e0996b;
+}
+div.mt {
+    margin-top: 50px;
+}

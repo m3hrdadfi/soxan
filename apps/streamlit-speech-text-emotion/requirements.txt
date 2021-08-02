@@ -1,1 +1,9 @@
 streamlit
+transformers
+torch
+torchaudio
+regex
+soundfile
+sounddevice
+plotly
+librosa
