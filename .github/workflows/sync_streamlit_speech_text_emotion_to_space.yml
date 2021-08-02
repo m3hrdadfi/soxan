@@ -37,7 +37,7 @@ jobs:
           echo "$COMMIT_MESSAGE"
           cd "$CLONE_DIR"
           echo "Remove wav files"
-          rm *.wav
+          rm -f *.wav
           echo "Files that will be pushed:"
           ls -la
           echo "git add:"
