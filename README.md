@@ -111,9 +111,11 @@ Output:
 
 
 ## Demos
-| Demo                                              | Link                                                                                                               |
-|---------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
-| Speech To Text With Emotion Recognition (Persian) | [huggingface.co/spaces/m3hrdadfi/speech-text-emotion](https://huggingface.co/spaces/m3hrdadfi/speech-text-emotion) |
+
+| Demo                                                     | Link                                                                                                               |
+|----------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| Speech To Text With Emotion Recognition (Persian) - soon | [huggingface.co/spaces/m3hrdadfi/speech-text-emotion](https://huggingface.co/spaces/m3hrdadfi/speech-text-emotion) |
+
 
 ## Models
 
