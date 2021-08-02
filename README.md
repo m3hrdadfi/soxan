@@ -1,14 +1,16 @@
 # Soxan
+
 > در زبان پارسی به نام سخن
 
 
-This repository consists of models, scripts, and notebooks that help you to use all the benefits of Wav2Vec 2.0 in your research. 
-In the following, I'll show you how to train speech tasks in your dataset and how to use the pretrained models.
+This repository consists of models, scripts, and notebooks that help you to use all the benefits of Wav2Vec 2.0 in your
+research. In the following, I'll show you how to train speech tasks in your dataset and how to use the pretrained
+models.
 
 ## How to train
 
-I'm just at the beginning of all the possible speech tasks. To start, we continue the training script with the speech emotion recognition problem.
-
+I'm just at the beginning of all the possible speech tasks. To start, we continue the training script with the speech
+emotion recognition problem.
 
 ### Training - Notebook
 
@@ -47,6 +49,7 @@ python3 run_wav2vec_clf.py \
 ```
 
 ### Prediction
+
 ```python
 import torch
 import torch.nn as nn
@@ -55,9 +58,7 @@ import torchaudio
 from transformers import AutoConfig, Wav2Vec2FeatureExtractor
 from src.models import Wav2Vec2ForSpeechClassification, HubertForSpeechClassification
 
-
 model_name_or_path = "path/to/your-pretrained-model"
-
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 config = AutoConfig.from_pretrained(model_name_or_path)
@@ -73,7 +74,7 @@ model = HubertForSpeechClassification.from_pretrained(model_name_or_path).to(dev
 
 def speech_file_to_array_fn(path, sampling_rate):
     speech_array, _sampling_rate = torchaudio.load(path)
-    resampler = torchaudio.transforms.Resample(_sampling_rate)
+    resampler = torchaudio.transforms.Resample(_sampling_rate, sampling_rate)
     speech = resampler(speech_array).squeeze().numpy()
     return speech
 
@@ -87,15 +88,17 @@ def predict(path, sampling_rate):
         logits = model(**inputs).logits
 
     scores = F.softmax(logits, dim=1).detach().cpu().numpy()[0]
-    outputs = [{"Emotion": config.id2label[i], "Score": f"{round(score * 100, 3):.1f}%"} for i, score in enumerate(scores)]
+    outputs = [{"Emotion": config.id2label[i], "Score": f"{round(score * 100, 3):.1f}%"} for i, score in
+               enumerate(scores)]
     return outputs
-    
-    
+
+
 path = "/path/to/disgust.wav"
 outputs = predict(path, sampling_rate)    
 ```
 
-Output: 
+Output:
+
 ```bash
 [
     {'Emotion': 'anger', 'Score': '0.0%'},
@@ -107,16 +110,20 @@ Output:
 ```
 
 
+## Demos
+| Demo                                              | Link                                                                                                               |
+|---------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| Speech To Text With Emotion Recognition (Persian) | [huggingface.co/spaces/m3hrdadfi/speech-text-emotion](https://huggingface.co/spaces/m3hrdadfi/speech-text-emotion) |
 
 ## Models
 
-| Dataset                                                                                                                      | Model                                                                                                                                       |
-|------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
-| [ShEMO: a large-scale validated database for Persian speech emotion detection](https://github.com/mansourehk/ShEMO)          | [m3hrdadfi/hubert-base-persian-speech-emotion-recognition](https://huggingface.co/m3hrdadfi/hubert-base-persian-speech-emotion-recognition) |
-| [ShEMO: a large-scale validated database for Persian speech emotion detection](https://github.com/mansourehk/ShEMO)          | [m3hrdadfi/hubert-base-persian-speech-gender-recognition](https://huggingface.co/m3hrdadfi/hubert-base-persian-speech-gender-recognition)   |
-| [Speech Emotion Recognition (Greek) (AESDD)](http://m3c.web.auth.gr/research/aesdd-speech-emotion-recognition/)              | [m3hrdadfi/hubert-large-greek-speech-emotion-recognition](https://huggingface.co/m3hrdadfi/hubert-large-greek-speech-emotion-recognition)   |
-| [Speech Emotion Recognition (Greek) (AESDD)](http://m3c.web.auth.gr/research/aesdd-speech-emotion-recognition/)              | [m3hrdadfi/hubert-base-greek-speech-emotion-recognition](https://huggingface.co/m3hrdadfi/hubert-base-greek-speech-emotion-recognition)     |
-| [Speech Emotion Recognition (Greek) (AESDD)](http://m3c.web.auth.gr/research/aesdd-speech-emotion-recognition/)              | [m3hrdadfi/wav2vec2-xlsr-greek-speech-emotion-recognition](https://huggingface.co/m3hrdadfi/wav2vec2-xlsr-greek-speech-emotion-recognition) |
-| [Eating Sound Collection](https://www.kaggle.com/mashijie/eating-sound-collection)                                           | [m3hrdadfi/wav2vec2-base-100k-eating-sound-collection](https://huggingface.co/m3hrdadfi/wav2vec2-base-100k-eating-sound-collection)         |
-| [GTZAN Dataset - Music Genre Classification](https://www.kaggle.com/andradaolteanu/gtzan-dataset-music-genre-classification) | [m3hrdadfi/wav2vec2-base-100k-gtzan-music-genres](https://huggingface.co/m3hrdadfi/wav2vec2-base-100k-gtzan-music-genres)                   |
-
+| Dataset                                                                                                                      | Model                                                                                                                                           |
+|------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| [ShEMO: a large-scale validated database for Persian speech emotion detection](https://github.com/mansourehk/ShEMO)          | [m3hrdadfi/wav2vec2-xlsr-persian-speech-emotion-recognition](https://huggingface.co/m3hrdadfi/wav2vec2-xlsr-persian-speech-emotion-recognition) |
+| [ShEMO: a large-scale validated database for Persian speech emotion detection](https://github.com/mansourehk/ShEMO)          | [m3hrdadfi/hubert-base-persian-speech-emotion-recognition](https://huggingface.co/m3hrdadfi/hubert-base-persian-speech-emotion-recognition)     |
+| [ShEMO: a large-scale validated database for Persian speech emotion detection](https://github.com/mansourehk/ShEMO)          | [m3hrdadfi/hubert-base-persian-speech-gender-recognition](https://huggingface.co/m3hrdadfi/hubert-base-persian-speech-gender-recognition)       |
+| [Speech Emotion Recognition (Greek) (AESDD)](http://m3c.web.auth.gr/research/aesdd-speech-emotion-recognition/)              | [m3hrdadfi/hubert-large-greek-speech-emotion-recognition](https://huggingface.co/m3hrdadfi/hubert-large-greek-speech-emotion-recognition)       |
+| [Speech Emotion Recognition (Greek) (AESDD)](http://m3c.web.auth.gr/research/aesdd-speech-emotion-recognition/)              | [m3hrdadfi/hubert-base-greek-speech-emotion-recognition](https://huggingface.co/m3hrdadfi/hubert-base-greek-speech-emotion-recognition)         |
+| [Speech Emotion Recognition (Greek) (AESDD)](http://m3c.web.auth.gr/research/aesdd-speech-emotion-recognition/)              | [m3hrdadfi/wav2vec2-xlsr-greek-speech-emotion-recognition](https://huggingface.co/m3hrdadfi/wav2vec2-xlsr-greek-speech-emotion-recognition)     |
+| [Eating Sound Collection](https://www.kaggle.com/mashijie/eating-sound-collection)                                           | [m3hrdadfi/wav2vec2-base-100k-eating-sound-collection](https://huggingface.co/m3hrdadfi/wav2vec2-base-100k-eating-sound-collection)             |
+| [GTZAN Dataset - Music Genre Classification](https://www.kaggle.com/andradaolteanu/gtzan-dataset-music-genre-classification) | [m3hrdadfi/wav2vec2-base-100k-gtzan-music-genres](https://huggingface.co/m3hrdadfi/wav2vec2-base-100k-gtzan-music-genres)                       |
