@@ -1,0 +1,50 @@
+name: Sync Streamlit to Hugging Face space [speech-text-emotion]
+
+on:
+  push:
+    branches: [streamlit-speech-text-emotion]
+
+  # to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  sync-streamlit-to-space:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Push to space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_USERNAME: m3hrdadfi
+          HF_SPACE: huggingface.co/spaces/m3hrdadfi/speech-text-emotion
+          TARGET_BRANCH: main
+          GIT_USER_EMAIL: m3hrdadfi@gmail.com
+          GIT_USER_NAME: Mehrdad Farahani
+        run: |
+          echo "Cloning destination git repository"
+          git config --global user.email "$GIT_USER_EMAIL"
+          git config --global user.name "$GIT_USER_NAME"
+          CLONE_DIR=$(mktemp -d)
+          git clone "https://$HF_USERNAME:$HF_TOKEN@$HF_SPACE" "$CLONE_DIR"
+          ls -la "$CLONE_DIR"
+          echo "Copy contents to clone git repository"
+          cp -rf ./apps/streamlit-speech-text-emotion/* "$CLONE_DIR"
+          COMMIT_MESSAGE=$(git log --oneline --format=%B -n 1 HEAD | head -n 1)
+          COMM=${COMM:=Synch with Github}
+          echo "commit message:"
+          echo "$COMMIT_MESSAGE"
+          cd "$CLONE_DIR"
+          echo "Remove wav files"
+          rm *.wav
+          echo "Files that will be pushed:"
+          ls -la
+          echo "git add:"
+          git add -A
+          echo "git status:"
+          git status
+          echo "git diff-index:"
+          git diff-index --quiet HEAD || git commit --message "$COMMIT_MESSAGE"
+          echo "git push origin:"
+          git push "https://$HF_USERNAME:$HF_TOKEN@$HF_SPACE" "$TARGET_BRANCH"
