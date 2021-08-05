@@ -13,14 +13,20 @@ def remote_css(css_url):
 
 
 def set_session_state(var_name, var_value):
-    if hasattr(st, "session_state"):
-        st.session_state[var_name] = var_value
+    try:
+        if hasattr(st, "session_state"):
+            st.session_state[var_name] = var_value
+    except AttributeError as e:
+        print(e)
 
 
 def get_session_state(var_name, default_value=None):
-    if hasattr(st, "session_state"):
-        if var_name in st.session_state:
-            return st.session_state[var_name]
+    try:
+        if hasattr(st, "session_state"):
+            if var_name in st.session_state:
+                return st.session_state[var_name]
+    except AttributeError as e:
+        print(e)
 
     return default_value
 
