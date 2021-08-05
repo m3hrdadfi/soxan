@@ -179,6 +179,8 @@ def main():
     local_css("assets/style.css")
     tts = load_tts()
 
+    st.write(sd.query_devices())
+
     col1, col2 = st.beta_columns([5, 7])
     with col2:
         st.markdown('<div class="mt"></div>', unsafe_allow_html=True)
