@@ -177,7 +177,7 @@ def main():
     remote_css("https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font/dist/font-face.css")
     set_session_state("_is_recording", False)
     local_css("assets/style.css")
-    st.write(sd.query_devices())
+    st.write(f"DEVICES: {sd.query_devices()}")
 
     tts = load_tts()
 
