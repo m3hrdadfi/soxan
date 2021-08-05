@@ -164,7 +164,6 @@ def load_tts():
         cf_model_type="wav2vec",
     )
     tts.load()
-    set_session_state("_is_recording", False)
     return tts
 
 
@@ -176,6 +175,7 @@ def main():
         initial_sidebar_state="expanded"
     )
     remote_css("https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font/dist/font-face.css")
+    set_session_state("_is_recording", False)
     local_css("assets/style.css")
     tts = load_tts()
 
