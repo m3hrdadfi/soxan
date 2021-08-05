@@ -1,1 +1,2 @@
 libportaudio2
+libsndfile1-dev
