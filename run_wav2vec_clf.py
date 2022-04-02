@@ -293,7 +293,7 @@ def main():
         revision=model_args.model_revision,
         use_auth_token=True if model_args.use_auth_token else None,
     )
-    target_sampling_rate = feature_extractor.feature_extractor.sampling_rate
+    target_sampling_rate = feature_extractor.sampling_rate
 
     if model_args.model_mode == "wav2vec":
         model = Wav2Vec2ForSpeechClassification.from_pretrained(
